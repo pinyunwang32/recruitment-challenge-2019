@@ -34,11 +34,15 @@ def get_solar_exposure_data_from_grid_file(grid_file_name, tzinfo=None):
     no_value_replacement = ''
 
     for ln in grid_file.readlines():
+        ln = ln.decode()
         ln = ln.strip('\n')
         if ln_no < 6:
+            
             p,v = ln.split(' ')
             params[p] = v
             
+#            Thanks for all, i change my code from: row = line.strip().split(",") to row = str(line.strip()).split(",") and work well. thanks a lot – Mfatchur Rahman Sep 17 '16 at 2:45 
+
             if 'ncols' in params: params['ncols'] = int(params['ncols'])
             if 'nrows' in params:
                 params['nrows'] = int(params['nrows'])
@@ -86,6 +90,6 @@ def get_solar_exposure_data_from_grid_file(grid_file_name, tzinfo=None):
 
 
 if __name__ == '__main__':
-    grid_file_name = sys.argv[1]
+    grid_file_name = '2019060120190601.grid'
     data_by_location, start_date, end_date = get_solar_exposure_data_from_grid_file(grid_file_name)
     print(data_by_location['-27.45']['153.05'], start_date, end_date)

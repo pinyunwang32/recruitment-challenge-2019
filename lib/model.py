@@ -43,7 +43,6 @@ def moving_standard_deviation(x, w):
     Also substitutes in `nan` values at the start to keep resulting array length
     the same as the input.
     """
-
     # XXX TODO - make a rolling standard deviation.
     # Should behaviour similarly to the `moving_average` function.
     return numpy.ones(x.shape)

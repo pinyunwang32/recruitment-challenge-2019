@@ -6,12 +6,13 @@ These are made using the pytest harness and cen be run with `tox`
 
 import numpy
 import pytest
-from model import moving_average, moving_standard_deviation, detect_anomalies
+
+import lib.model
 
 
 def test_moving_average():
     a = numpy.linspace(0,1,10)
-    ma = moving_average(a, 3)
+    ma = lib.model.moving_average(a, 3)
     assert a.shape == ma.shape
     expected_ma = numpy.array([
         numpy.nan,
@@ -30,7 +31,7 @@ def test_moving_average():
 
 def test_moving_standard_deviation():
     a = numpy.linspace(0,1,10)
-    ms = moving_standard_deviation(a, 3)
+    ms = lib.model.moving_standard_deviation(a, 3)
     ### XXX TODO finish this test
     raise Exception("need to write a valid test for this")
 
@@ -116,7 +117,7 @@ def test_detect_anomalies_with_basic_input():
         -0.131432386301,
     ])
     expected_anomolies = [54000.0, 57600.0, 61200.0]
-    result = detect_anomalies(time, a1, a2)
+    result = lib.model.detect_anomalies(time, a1, a2)
     assert (result['feature'] == (a1-a2)).all()
     # XXX Test below fails because the moving_standard_deviation function isn't finished yet...
     assert abs(numpy.nansum(result['mean_shift'] - expected_mean_shift)) < 1.0e-8
@@ -125,13 +126,12 @@ def test_detect_anomalies_with_basic_input():
 
 def test_detect_anomalies_with_empty_input():
     with pytest.raises(AssertionError):
-        detect_anomalies(numpy.array([]), numpy.array([]), numpy.array([]))
+        lib.model.detect_anomalies(numpy.array([]), numpy.array([]), numpy.array([]))
 
 def test_detect_anomalies_with_invalid_input_types():
     with pytest.raises(AssertionError):
-        detect_anomalies([], [], [])
+        lib.model.detect_anomalies([], [], [])
 
 def test_detect_anomalies_with_invalid_input_shapes():
     with pytest.raises(AssertionError):
-        detect_anomalies(numpy.array([0.0, 1.0, 2.0]), numpy.array([1.0, 2.0]), numpy.array([1.0, 2.0]))
-        
+        lib.model.detect_anomalies(numpy.array([0.0, 1.0, 2.0]), numpy.array([1.0, 2.0]), numpy.array([1.0, 2.0]))
